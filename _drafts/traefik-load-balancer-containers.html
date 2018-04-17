@@ -1,0 +1,75 @@
+---
+layout: post
+title: 'Traefik: load balancer e reverse proxy'
+date: 
+type: post
+parent_id: '0'
+published: false
+password: ''
+status: draft
+categories:
+- Docker
+tags:
+- devops
+- docker
+- traefik
+meta:
+  _edit_last: '2'
+  _thumbnail_id: '86'
+  _yoast_wpseo_content_score: '30'
+  _yoast_wpseo_primary_category: '6'
+  _publicize_twitter_user: "@devncode"
+  _jetpack_related_posts_cache: a:1:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1513120783;s:7:"payload";a:1:{i:0;a:1:{s:2:"id";i:71;}}}}
+  _yoast_wpseo_focuskw_text_input: traefik
+  _yoast_wpseo_focuskw: traefik
+  _yoast_wpseo_metadesc: 'Traefik: il load balancer e reverse proxy adatto per le
+    architetture a microservices. In questo articolo vedremo cosa è e come utilizzarlo.'
+  _yoast_wpseo_linkdex: '82'
+author:
+  login: marco
+  email: marco.cotrufo@devncode.it
+  display_name: marco
+  first_name: Marco
+  last_name: Cotrufo
+---
+<p>In questo articolo andrò a scrivere di <strong>Traefik</strong>, un loadbalancer e reverse proxy scritto in GO orientato in particolar modo alle architetture microservices.</p>
+<p><img class=" size-full wp-image-89 aligncenter" src="{{ site.baseurl }}/assets/architecture.png" alt="architecture" width="1921" height="1050" /></p>
+<h3>Traefik: intro</h3>
+<p>Come ho accennato, <em>traefik</em> è un loadbalancer/reverse proxy: immaginate di avere una classica architettura a microservice, probabilmente utilizzate <a href="http://devncode.it/2017/09/19/docker-laravel-lambiente-di-sviluppo/">Docker</a> per il deploy dei servizi e un <em>orchestrator</em> come <em>swarm</em> (argomento di un prossimo articolo). Nel momento in cui andremo ad effettuare il deploy di una nuova istanza di un servizio questo dovrà essere raggiungibile dall'esterno:</p>
+<p><img class=" size-full wp-image-107 aligncenter" src="{{ site.baseurl }}/assets/Richardson-microservices-part4-3_server-side-pattern.png" alt="server side pattern" width="1024" height="631" /></p>
+<p>Il limite di questa architettura è che dovremo continuamente agire sulla configurazione di queste parti per andare ad aggiungere o rimuovere via via le nuove istanze.</p>
+<p><strong>Traefik</strong> invece ha un approccio al problema estremamente dinamico: rimane in "<em>ascolto</em>" di quello che succede sul server di Docker (o di uno degli altri backend che può utilizzare) e automaticamente registra le nuove istanze, associandole ad uno (o più) domini o path. Ad esempio, attualmente il sito <a href="http://devncode.it">Dev'N'Code</a> è un container di WordPress esposto attraverso una istanza di <a href="https://varnish-cache.org/" target="_blank" rel="noopener">Varnish</a> a sua volta configurato in questa maniera:</p>
+<p><img class=" size-full wp-image-122 aligncenter" src="{{ site.baseurl }}/assets/Screen-Shot-2017-09-19-at-23.41.43.png" alt="Devncode microservices" width="471" height="296" /></p>
+<p>Lo screenshot riporta la configurazione di <a href="https://www.ansible.com/" target="_blank" rel="noopener">Ansible</a> che uso per il deploy, ma penso che sia abbastanza chiara anche senza avere particolari conoscenze di questo tool.</p>
+<p>La parte cruciale che ci interessa riguarda le labels del container: queste infatti comunicheranno a <em>traefik</em> la configurazione del servizio:</p>
+<ul>
+<li><strong>traefik.enable</strong>: rende disponibile il servizio</li>
+<li><strong>traefik.backend</strong>: è il nome che vogliamo associare, sarà poi visualizzato nella WebUI</li>
+<li><strong>traefik.frontend.rule</strong>: questa label serve per associare il servizio ad uno o più domini. Potremmo anche associarlo ad un particolare path di un dominio (per esempio per il deploy di Rest API)</li>
+<li><strong>traefik.port</strong>: è la porta che espone il nostro servizio e che <em>traefik</em> utilizzerà per comunicare con esso</li>
+</ul>
+<p>Per ulteriori approfondimenti vi rimando alla <a href="https://docs.traefik.io/configuration/backends/docker/" target="_blank" rel="noopener">documentazione</a>.</p>
+<h3>WebUI</h3>
+<p>Un altro punto a favore è la sua interfaccia di monitoraggio:</p>
+<p>[gallery ids="140,141" type="square" columns="2"]</p>
+<p>Da qui è possibile avere un riepilogo dei servizi registrati e dello stato degli stessi. Nel momento in cui andremo ad avviare un nuovo container, se configurato con le corrette labels, questo sarà registrato automaticamente in traefik e mostrato nell'interfaccia web.</p>
+<h3>Passiamo alla pratica</h3>
+<p>Dopo questa breve panoramica proviamo a creare una configurazione per docker-compose per l'ipotetico deploy di una nostra architettura basata su containers. Il codice di questo articolo è visionabile sul <a href="https://github.com/marcocot/traefik-tutorial" target="_blank" rel="noopener">mio repository.</a></p>
+<p>Partiamo dal <i>traefik.toml</i>, il file di configurazione:</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="ini">logLevel = "INFO"
+defaultEntryPoints = ["http"]
+
+[web]
+address = ":7000"
+
+[docker]
+domain = "devncode.it"
+watch = true
+exposedbydefault = false
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+</pre>
+<p>Con questa configurazione abilitiamo come backend <em>Docker </em>, mettendo il nostro <em>traefik </em> in ascolto su tutto quello che succede.</p>
+<p>&nbsp;</p>

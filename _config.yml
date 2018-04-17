@@ -1,0 +1,60 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+title: Dev'n'Code
+email: Marco Cotrufo
+description: >- # this means to ignore newlines until "baseurl:"
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://devncode.it" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: devncode
+github_username:  marcocot
+permalink: /:categories/:year/:month/:day/:title:output_ext
+lang: it_IT
+timezone: Europe/Rome
+profile: true
+
+social:
+  name: Marco Cotrufo
+  links:
+    - https://www.linkedin.com/in/marcocotrufo/
+
+# Author Settings
+author: Marco Cotrufo # add your name
+author-img: bio.jpg # add your photo
+about-author: It works on my machine!
+social-github: marcocot # add your Github handle
+social-linkedin: marco.cotrufo # add your Linkedin handle
+social-email: marco.cotrufo@devncode.it # add your Email address
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-paginate
+  - jekyll-toc
+  - jekyll-seo-tag
+  - jemoji  
+
+paginate: 8
+paginate_path: "/page/:num"
+
+exclude: ["node_modules", "gulpfile.js", "package.json", "yarn.lock"]
+
