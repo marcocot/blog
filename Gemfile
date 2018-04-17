@@ -33,3 +33,5 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Performance-booster for watching directories on Windows
 gem "wdm", "~> 0.1.0" if Gem.win_platform?
+# Added at 2018-04-17 22:52:22 +0200 by marco.cotrufo:
+gem "html-proofer", "~> 3.8"
