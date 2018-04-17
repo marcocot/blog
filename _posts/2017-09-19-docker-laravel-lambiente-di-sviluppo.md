@@ -22,7 +22,7 @@ In questo articolo mosterò come ulizzare [Docker](http://docker.io) per crear
 
 Prima di passare al _concreto_, trovo sia necessaria fare una piccola premessa su cosa sono i container e come stanno rivoluzionando l'industria.
 
-![]({{ site.baseurl }}/assets/container_vs_vm.jpg)
+![Container vs VM]({{ site.baseurl }}/assets/container_vs_vm.jpg)
 
 Per molti versi possiamo pensare ai _container_ come simili ad una **virtual machine** con alcune sostanziali differenze. La differenza più importante (e più sostanziale) è che una **vm** virtualizza un intero sistema operativo all'interno di un _guest _dovendo anche simulare lo strato hardware, mentre un **container **sfrutta una tecnologia presente nel kernel di Linux chiamata "[LXC - Linux containers](https://linuxcontainers.org/)" per poter _isolare_ una parte del sistema operativo dove far quindi girare le nostre applicazioni. [Docker](http://docker.io) nasce nel 2013 come framework al di sopra di LXC come tool per poter *pacchettizzare* le applicazioni all'interno di _scatole_ che poi vengono eseguite dal kernel, togliendo quindi l'overhead di una macchina virtuale.
 
