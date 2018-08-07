@@ -22,7 +22,7 @@ group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.6"
   gem "jekyll-sitemap", "~> 1.2"
   gem "jekyll-paginate", "~> 1.1"
-  gem "jemoji", "~> 0.9.0"
+  gem "jemoji", "~> 0.10.1"
   gem "rouge", "~> 3.1"
   gem 'jekyll-toc'
   gem 'jekyll-seo-tag'
